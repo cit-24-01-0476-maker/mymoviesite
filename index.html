@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyMovieSite - Premium Streaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* --- PREMIUM CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #080808;
+            --bg-secondary: #121212;
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --accent-red: #e50914;
+            --accent-red-hover: #ff2a35;
+            --accent-green: #25D366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- NEXT LEVEL: Custom Premium Scrollbar --- */
+        ::-webkit-scrollbar { width: 10px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; border-left: 1px solid #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+
+        /* --- LIVE EFFECT: Background Ambient Glow --- */
+        body::before {
+            content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(229, 9, 20, 0.05), transparent 60%);
+            z-index: -1; pointer-events: none; animation: pulse-glow 8s infinite alternate;
+        }
+        @keyframes pulse-glow { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        /* --- PRELOADER --- */
+        .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-color); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        .loader-ring { width: 60px; height: 60px; border: 4px solid rgba(229, 9, 20, 0.1); border-top: 4px solid var(--accent-red); border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 20px rgba(229,9,20,0.4); }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- 🚨 FIX: PREMIUM GLASSMORPHISM HEADER 🚨 --- */
+        header { position: fixed; top: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: all 0.4s ease; background: transparent; }
+        header.scrolled { 
+            background: rgba(10, 10, 10, 0.6); /* Softer transparent black */
+            backdrop-filter: blur(25px); /* Strong blur for premium glass effect */
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(229, 9, 20, 0.3); /* Subtle red glowing line */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            padding: 12px 40px; 
+        }
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--accent-red); letter-spacing: 1px; text-shadow: 0 0 15px rgba(229,9,20,0.5); transition: 0.3s; cursor: pointer; }
+        .logo:hover { transform: scale(1.05); text-shadow: 0 0 25px rgba(229,9,20,0.8); }
+        nav ul { display: flex; list-style: none; gap: 35px; }
+        nav ul li a { font-size: 1.05rem; font-weight: 400; position: relative; padding-bottom: 5px; color: #ddd; }
+        nav ul li a::after { content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: var(--accent-red); transition: 0.3s ease; box-shadow: 0 0 8px var(--accent-red); }
+        nav ul li a:hover::after { width: 100%; }
+        nav ul li a:hover { color: var(--text-main); }
+        .btn-whatsapp { background: linear-gradient(45deg, #25D366, #128C7E); color: white; padding: 10px 25px; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); transition: all 0.3s; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-whatsapp:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6); }
+
+        /* --- CINEMATIC HERO SECTION --- */
+        .hero { height: 95vh; background: linear-gradient(to top, var(--bg-color) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; background-attachment: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; position: relative; overflow: hidden; }
+        .hero::after { content:''; position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(to top, var(--bg-color), transparent); z-index: 1; }
+        
+        .particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .particle { position: absolute; background: rgba(255,255,255,0.5); border-radius: 50%; animation: floatUp linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+
+        .hero-content { z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; animation: fadeInDown 1.5s ease; }
+        @keyframes fadeInDown { 0% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes textGlow { 0% { text-shadow: 0 0 10px rgba(229,9,20,0.5); } 100% { text-shadow: 0 0 30px rgba(229,9,20,0.9), 0 0 10px rgba(255,255,255,0.3); } }
+        .hero h1 { font-size: 5.5rem; font-weight: 800; margin-bottom: 15px; line-height: 1.1; letter-spacing: -2px; animation: textGlow 2.5s infinite alternate; }
+        .hero p { font-size: 1.4rem; color: #ddd; margin-bottom: 40px; font-weight: 300; text-shadow: 1px 2px 8px rgba(0,0,0,0.9); }
+        
+        /* --- 🚨 FIX: CENTERED & REDESIGNED SEARCH BAR 🚨 --- */
+        .search-bar { 
+            display: flex; 
+            width: 100%; 
+            max-width: 700px; 
+            margin: 0 auto; /* Ensures it perfectly centers */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.1); 
+            border-radius: 50px; 
+            overflow: hidden; 
+            background: rgba(15,15,15,0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .search-bar:hover, .search-bar:focus-within { 
+            transform: translateY(-5px) scale(1.02); 
+            box-shadow: 0 25px 50px rgba(229,9,20,0.25), inset 0 0 0 1px var(--accent-red); 
+        }
+        .search-bar input { flex: 1; padding: 22px 35px; border: none; background: transparent; color: white; font-size: 1.15rem; outline: none; }
+        .search-bar input::placeholder { color: #888; }
+        .search-bar button { padding: 0 45px; background: linear-gradient(45deg, var(--accent-red), #b80710); color: white; border: none; font-size: 1.15rem; cursor: pointer; font-weight: 600; transition: 0.3s; letter-spacing: 1px; }
+        .search-bar button:hover { background: white; color: var(--accent-red); box-shadow: inset 0 0 15px rgba(0,0,0,0.2); }
+
+        /* --- LIVE EFFECT: Scroll Reveal Classes --- */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- SECTIONS & CAROUSEL --- */
+        section { padding: 70px 40px; position: relative; z-index: 2; }
+        .section-title { font-size: 2rem; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; letter-spacing: 0.5px; }
+        .section-title i { color: var(--accent-red); text-shadow: 0 0 15px rgba(229,9,20,0.8); font-size: 2.2rem; }
+        
+        .carousel { display: flex; gap: 25px; overflow-x: auto; padding-bottom: 30px; padding-top: 20px; padding-left: 10px; scroll-behavior: smooth; }
+        .carousel::-webkit-scrollbar { height: 8px; }
+        .carousel::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .carousel::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+
+        /* --- PREMIUM MOVIE CARDS --- */
+        .movie-card { flex: 0 0 auto; width: 220px; cursor: pointer; position: relative; border-radius: 15px; overflow: hidden; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(0,0,0,0.6); background: #111; }
+        .movie-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-25deg); transition: 0.7s ease; z-index: 5; pointer-events: none; }
+        .movie-card:hover::before { left: 150%; }
+
+        .movie-card img { width: 100%; height: 330px; object-fit: cover; transition: transform 0.6s ease; }
+        .movie-card:hover { transform: scale(1.08) translateY(-15px); z-index: 10; box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 30px rgba(229,9,20,0.4); border: 1px solid rgba(255,255,255,0.15); }
+        .movie-card:hover img { transform: scale(1.15); filter: brightness(0.3); }
+        
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s; z-index: 2; }
+        .movie-card:hover .play-overlay { opacity: 1; }
+        .play-btn-icon { width: 65px; height: 65px; background: rgba(229,9,20,0.9); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.6rem; box-shadow: 0 0 25px var(--accent-red); border: 2px solid rgba(255,255,255,0.3); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .movie-card:hover .play-btn-icon { transform: scale(1.2) rotate(360deg); }
+        
+        .movie-card h4 { position: absolute; bottom: -60px; left: 0; width: 100%; padding: 30px 10px 15px; background: linear-gradient(to top, rgba(0,0,0,1), transparent); font-size: 1.1rem; font-weight: 600; transition: bottom 0.4s ease; text-align: center; z-index: 3; text-shadow: 1px 1px 4px rgba(0,0,0,0.9); }
+        .movie-card:hover h4 { bottom: 0; }
+        .adult-warning { position: absolute; top: 10px; right: 10px; background: rgba(229,9,20,0.95); color: white; font-size: 0.75rem; font-weight: 800; padding: 6px 12px; border-radius: 8px; z-index: 4; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
+
+        /* --- CINEMA CARDS & MAP --- */
+        .cinema-controls { display: flex; gap: 15px; margin-bottom: 25px; }
+        .btn-location { background: linear-gradient(45deg, #1a1a1a, #222); color: white; padding: 16px 30px; border: 1px solid #444; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .btn-location:hover { background: linear-gradient(45deg, var(--accent-red), #ff2a35); border-color: transparent; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(229,9,20,0.5); }
+        .cinema-search-input { flex: 1; padding: 16px 30px; border-radius: 30px; border: 1px solid #444; background: rgba(15,15,15,0.8); color: white; font-size: 1.05rem; outline: none; transition: 0.3s; backdrop-filter: blur(10px); }
+        .cinema-search-input:focus { border-color: var(--accent-red); box-shadow: 0 0 20px rgba(229,9,20,0.2); background: #050505; }
+        
+        /* 🚨 FIX: Map Grey Box issue fixed by making it always display: block 🚨 */
+        #map { 
+            height: 480px; 
+            width: 100%; 
+            border-radius: 20px; 
+            margin-top: 20px; 
+            z-index: 1; 
+            border: 1px solid rgba(255,255,255,0.08); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7); 
+            display: block !important; /* Force visible to prevent rendering bugs */
+        }
+        .leaflet-popup-content-wrapper { background: rgba(15,15,15,0.95); backdrop-filter: blur(5px); color: white; border-radius: 12px; border: 1px solid var(--accent-red); box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
+        .leaflet-popup-tip { background: #0f0f0f; border: 1px solid var(--accent-red); }
+
+        .cinema-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; margin-top: 35px; }
+        .cinema-box { background: linear-gradient(145deg, rgba(25,25,25,0.9), rgba(15,15,15,0.9)); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .cinema-box::after { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle, rgba(229,9,20,0.1), transparent); border-radius: 50%; pointer-events: none; }
+        .cinema-box:hover { transform: translateY(-10px); border-color: rgba(229,9,20,0.6); box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(229,9,20,0.15); }
+        .cinema-box h3 { font-size: 1.4rem; color: white; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; }
+        .cinema-box h3 i { color: var(--accent-red); font-size: 1.2rem; }
+        .cinema-box p { font-size: 1rem; color: #aaa; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .cinema-box .distance { display: inline-block; margin-top: 15px; padding: 8px 18px; background: rgba(37, 211, 102, 0.1); color: var(--accent-green); border-radius: 25px; font-weight: 600; font-size: 0.9rem; border: 1px solid rgba(37, 211, 102, 0.2); transition: 0.3s; }
+        .cinema-box:hover .distance { background: rgba(37, 211, 102, 0.2); box-shadow: 0 0 15px rgba(37, 211, 102, 0.2); }
+
+        /* --- UPDATES & REQUEST --- */
+        .flex-container { display: flex; gap: 40px; flex-wrap: wrap; }
+        .updates-box, .request-box { flex: 1; min-width: 320px; background: linear-gradient(145deg, rgba(25,25,25,0.9), rgba(15,15,15,0.9)); backdrop-filter: blur(15px); padding: 45px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 15px 40px rgba(0,0,0,0.6); transition: transform 0.4s; }
+        .updates-box:hover, .request-box:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); }
+        .updates-list li { list-style: none; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 1rem; display: flex; align-items: center; gap: 15px; transition: 0.3s; color: #bbb; }
+        .updates-list li:hover { color: white; transform: translateX(8px); }
+        .updates-list li i { color: var(--accent-red); font-size: 1.3rem; text-shadow: 0 0 10px rgba(229,9,20,0.5); }
+        
+        .request-form { display: flex; flex-direction: column; gap: 25px; }
+        .request-form input { padding: 20px 25px; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; background: rgba(0,0,0,0.6); color: white; outline: none; transition: 0.3s; font-size: 1.05rem; }
+        .request-form input:focus { border-color: var(--accent-red); box-shadow: 0 0 20px rgba(229,9,20,0.2); background: #000; }
+        .request-form button { padding: 20px; background: linear-gradient(45deg, var(--accent-red), #ff2a35); color: white; border: none; border-radius: 15px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(229,9,20,0.4); }
+        .request-form button:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(229,9,20,0.6); }
+
+        /* --- NEXT LEVEL: Premium Modal --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(15px); opacity: 0; transition: opacity 0.4s ease; }
+        .modal-content { background: linear-gradient(145deg, #1a1a1a, #0a0a0a); width: 90%; max-width: 850px; border-radius: 25px; padding: 50px; position: relative; transform: scale(0.7) translateY(50px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 50px rgba(229,9,20,0.05); }
+        .modal-overlay.active { opacity: 1; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .close-btn { position: absolute; top: 25px; right: 30px; font-size: 2rem; cursor: pointer; color: #888; transition: all 0.3s; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: rgba(255,255,255,0.05); }
+        .close-btn:hover { color: white; background: var(--accent-red); transform: rotate(90deg); box-shadow: 0 0 15px var(--accent-red); }
+        .trailer-placeholder { width: 100%; height: 450px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover; display: flex; justify-content: center; align-items: center; border-radius: 20px; margin: 30px 0; position: relative; box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
+        .trailer-placeholder::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle, transparent, rgba(0,0,0,0.7)); pointer-events: none; }
+        .trailer-placeholder i { font-size: 6rem; color: rgba(255,255,255,0.9); z-index: 2; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9)); }
+        .trailer-placeholder i:hover { transform: scale(1.2); color: var(--accent-red); filter: drop-shadow(0 0 30px var(--accent-red)); }
+        .btn-download { display: flex; justify-content: center; align-items: center; gap: 12px; background: linear-gradient(45deg, #4285F4, #1a53bd); color: white; padding: 20px; border-radius: 15px; font-weight: 600; text-align: center; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 8px 25px rgba(66, 133, 244, 0.4); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-download:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(66, 133, 244, 0.7); background: linear-gradient(45deg, #5b9aff, #2b6add); }
+
+        footer { text-align: center; padding: 50px; background: #050505; color: #555; font-size: 0.95rem; margin-top: 60px; border-top: 1px solid #1a1a1a; position: relative; z-index: 2; }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.2rem; } .hero p { font-size: 1.1rem; }
+            header { padding: 15px 20px; } nav ul { display: none; }
+            .modal-content { padding: 30px; } .trailer-placeholder { height: 250px; }
+            .search-bar { border-radius: 20px; flex-direction: column; background: transparent; box-shadow: none; }
+            .search-bar input { border-radius: 15px; margin-bottom: 10px; background: rgba(20,20,20,0.9); }
+            .search-bar button { border-radius: 15px; }
+            .search-bar::before { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preloader" id="preloader"><div class="loader-ring"></div></div>
+
+    <header id="header">
+        <div class="logo">MyMovie<span style="color:white;">Site</span></div>
+        <nav>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#categories">Movies</a></li>
+                <li><a href="#cinema-halls">Cinemas</a></li>
+                <li><a href="#updates">Updates</a></li>
+            </ul>
+        </nav>
+        <a href="https://chat.whatsapp.com/H0XZCQ1UJ6UIQm2LLa4Qwt" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp" style="font-size:1.4rem;"></i> Join Group</a>
+    </header>
+
+    <section class="hero" id="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1>Unlimited Cinematic<br>Experience.</h1>
+            <p>Download, stream, or find the nearest premium cinemas.</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for movies, TV shows, or genres...">
+                <button onclick="alert('Searching...')"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="reveal">
+        <h2 class="section-title"><i class="fas fa-film"></i> Trending Sinhala</h2>
+        <div class="carousel" id="sinhala-movies"></div>
+
+        <h2 class="section-title" style="margin-top: 50px;"><i class="fas fa-globe"></i> Hollywood Blockbusters</h2>
+        <div class="carousel" id="english-movies"></div>
+
+        <h2 class="section-title" style="color: #ff4444; margin-top: 50px;"><i class="fas fa-exclamation-triangle"></i> Restricted 18+</h2>
+        <div class="carousel" id="adult-movies"></div>
+    </section>
+
+    <section id="cinema-halls" class="reveal">
+        <h2 class="section-title"><i class="fas fa-map-marker-alt"></i> Find Cinemas In Sri Lanka</h2>
+        <div class="cinema-controls">
+            <button class="btn-location" id="btnLocation" onclick="locateUser()"><i class="fas fa-location-arrow"></i> Find My Location</button>
+            <input type="text" id="cinemaSearchInput" class="cinema-search-input" placeholder="Search by hall name or city (e.g. Kandy, Galle, Colombo)..." onkeyup="filterCinemas()">
+        </div>
+        
+        <div id="map"></div>
+        
+        <div class="cinema-grid" id="cinemaGrid"></div>
+    </section>
+
+    <section class="reveal">
+        <div class="flex-container">
+            <div class="updates-box" id="updates">
+                <h2 class="section-title"><i class="fas fa-bell"></i> Latest Updates</h2>
+                <ul class="updates-list">
+                    <li><i class="fas fa-check-circle"></i> High Quality 4K rips added to English category.</li>
+                    <li><i class="fas fa-tools"></i> Server 2 speed optimization complete.</li>
+                    <li><i class="fas fa-ticket-alt"></i> Islandwide Cinema timings updated.</li>
+                </ul>
+            </div>
+            <div class="request-box" id="request">
+                <h2 class="section-title"><i class="fas fa-paper-plane"></i> Request a Movie</h2>
+                <form class="request-form" onsubmit="event.preventDefault(); alert('Request sent to admin!');">
+                    <input type="text" placeholder="Movie Name (e.g. Avatar)" required>
+                    <input type="number" placeholder="Release Year (Optional)">
+                    <button type="submit">Submit Request <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 MyMovieSite Premium. Handcrafted for Movie Lovers in Sri Lanka.</p>
+    </footer>
+
+    <div class="modal-overlay" id="movieModal">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></div>
+            <h2 id="modalTitle" style="font-size: 2.5rem; margin-bottom: 5px;">Movie Title</h2>
+            <p style="color: var(--accent-red); margin-bottom: 20px; font-weight: 600; letter-spacing: 2px; font-size: 0.9rem;">2024 • PREMIUM RIP • 4K UHD</p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #ccc;"><strong>Synopsis:</strong> An epic journey through space and time to save humanity from the brink of extinction. Featuring breathtaking visuals and heart-pounding action sequences.</p>
+            <div class="trailer-placeholder"><i class="fas fa-play-circle"></i></div>
+            <a href="#" id="modalDownloadBtn" class="btn-download"><i class="fab fa-google-drive" style="font-size: 1.5rem;"></i> Download via Google Drive</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // GENERATE PARTICLES FOR HERO SECTION
+        const particlesContainer = document.getElementById('particles');
+        for(let i=0; i<30; i++) {
+            let p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = Math.random() * 5 + 2 + 'px';
+            p.style.height = p.style.width;
+            p.style.animationDuration = Math.random() * 5 + 5 + 's';
+            p.style.animationDelay = Math.random() * 5 + 's';
+            particlesContainer.appendChild(p);
+        }
+
+        // PRELOADER
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => { 
+                const preloader = document.getElementById('preloader');
+                if(preloader) { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); }
+            }, 500);
+            
+            initMap();
+        });
+
+        // SCROLL REVEAL
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) { reveals[i].classList.add("active"); }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // --- 1. SINHALA MOVIES ---
+        const sinhalaMoviesList = [
+            { name: "නිමි (Nimi)", image: "images/nimi.jpg" }, { name: "Zoom", image: "images/zoom.jpg" },
+            { name: "තට්ටු දෙකේ ඉස්කෝලේ", image: "images/tattudekeiskole.jpg" }, { name: "යූ ටර්න් (U Turn)", image: "images/uturn.jpg" },
+            { name: "ආදරණීය කතාවක්", image: "images/adaraniyakathwk.jpg" }, { name: "ජංගි හොරා", image: "images/uderpantsthief.jpg" },
+            { name: "ආලේ කොරෝනා", image: "images/aalecorona.jpg" }, { name: "Ice Cream", image: "images/icecream.jpg" },
+            { name: "සූරියා (Soorya)", image: "images/soorya.jpg" }
+        ];
+
+        // --- 2. HOLLYWOOD MOVIES ---
+        const hollywoodMoviesList = [
+            { name: "28 Years Later", image: "hollywood/28 Years Later The Bone Temple.jpg" }, { name: "Anaconda", image: "hollywood/anaconda.jpg" },
+            { name: "Bad Teacher", image: "hollywood/bad teacher.jpg" }, { name: "Christy", image: "hollywood/christy.jpg" },
+            { name: "I Swear", image: "hollywood/i swear.jpg" }, { name: "Im Still Here", image: "hollywood/im still here.jpg" },
+            { name: "Sisu: Road to Revenge", image: "hollywood/sisu road to revenge.jpg" }, { name: "Tron: Ares", image: "hollywood/tron areas.jpg" },
+            { name: "Wake Up Dead Man", image: "hollywood/wakeup dead man.jpg" }, { name: "Marty Supreme", image: "hollywood/Marty Supreme.jpg" }
+        ];
+
+        // --- 3. 18+ MOVIES (Google Drive Links Added) ---
+        const adultMoviesList = [
+            { name: "Belle de Jour", image: "adult/Belle de Jour.jpg", link: "https://drive.google.com/file/d/1PM4AIVa1e3mbUybHwLgkG1Ozz9jJcu-D/view?usp=sharing" }, 
+            { name: "Great Expectations", image: "adult/Great ExpectatioNs.jpg", link: "https://drive.google.com/file/d/17Bqn36gg9cln7PueeGt0W7spc6m6PhSy/view?usp=sharing" }, 
+            { name: "Henry & June", image: "adult/Henry & June.jpg" }, 
+            { name: "House of Tolerance", image: "adult/House of Tolerance.jpg" },
+            { name: "Ligaw", image: "adult/Ligaw.jpg", link: "https://drive.google.com/file/d/1tbumuzYj4xbF3BeRIJ5ZlR05paV3rrpl/view?usp=sharing" }, 
+            { name: "Love at the Top", image: "adult/Love at the Top.jpg" },
+            { name: "Night Nurse", image: "adult/Night Nurse.jpg", link: "https://drive.google.com/file/d/1u0GKsNipK98x6aNsaCCntWyrs6NYfgyG/view?usp=sharing" }, 
+            { name: "Rapsa", image: "adult/Rapsa.jpg" },
+            { name: "Sabik", image: "adult/Sabik.jpg" }, 
+            { name: "So Young, So Lovely, So Vicious", image: "adult/So Young, So Lovely, So Vicious.jpg" },
+            { name: "The Sexual Story of O", image: "adult/The Sexual Story of O.jpg" }, 
+            { name: "Uncle Tom Cabin", image: "adult/Uncle Tom Cabin.jpg" } 
+        ];
+
+        function renderMovies(containerId, movieList, isAdult = false) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            movieList.forEach((movie) => {
+                const warning = isAdult ? `<div class="adult-warning"><i class="fas fa-lock"></i> 18+</div>` : '';
+                const blurClass = isAdult ? 'style="filter: blur(5px) brightness(0.8);"' : '';
+                const safeName = movie.name.replace(/'/g, "\\'");
+                const movieLink = movie.link ? movie.link : '#';
+
+                html += `
+                    <div class="movie-card" onclick="openModal('${safeName}', '${movieLink}')">
+                        ${warning}
+                        <img src="${movie.image}" alt="${movie.name}" ${blurClass} onerror="this.src='https://via.placeholder.com/200x300/111/fff?text=No+Image'">
+                        <div class="play-overlay"><div class="play-btn-icon"><i class="fas fa-play" style="margin-left:4px;"></i></div></div>
+                        <h4>${movie.name}</h4>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        renderMovies('sinhala-movies', sinhalaMoviesList);
+        renderMovies('english-movies', hollywoodMoviesList);
+        renderMovies('adult-movies', adultMoviesList, true); 
+
+        // --- FULL SRI LANKA CINEMAS DATA WITH REAL GPS COORDINATES ---
+        const cinemaData = [
+            { name: "Scope Cinemas - CCC", city: "Colombo", type: "IMAX / 3D", lat: 6.9240, lon: 79.8500 },
+            { name: "Liberty By Scope", city: "Kollupitiya", type: "2D / 3D", lat: 6.9080, lon: 79.8510 },
+            { name: "PVR Cinemas - One Galle Face", city: "Colombo", type: "4DX / 3D", lat: 6.9280, lon: 79.8440 },
+            { name: "Milano Diamond", city: "Maharagama", type: "2D / 3D", lat: 6.8480, lon: 79.9230 },
+            { name: "Savoy 3D", city: "Wellawatte", type: "2D / 3D", lat: 6.8740, lon: 79.8600 },
+            { name: "Majestic Cineplex", city: "Bambalapitiya", type: "2D / 3D", lat: 6.8940, lon: 79.8540 },
+            { name: "Nidahas Cinema", city: "Homagama", type: "2D / 3D", lat: 6.8420, lon: 80.0030 },
+            { name: "Kandy City Centre Cineplex", city: "Kandy", type: "2D / 3D", lat: 7.2930, lon: 80.6380 },
+            { name: "Regal Cinema", city: "Kandy", type: "2D / 3D", lat: 7.2900, lon: 80.6330 },
+            { name: "Queens Cinema", city: "Galle", type: "2D / 3D", lat: 6.0340, lon: 80.2150 },
+            { name: "Cinemax 3D", city: "Matara", type: "2D / 3D", lat: 5.9490, lon: 80.5470 },
+            { name: "Imperial Talkies", city: "Kurunegala", type: "2D / 3D", lat: 7.4870, lon: 80.3650 },
+            { name: "Regal Cinema", city: "Negombo", type: "2D / 3D", lat: 7.2080, lon: 79.8360 },
+            { name: "Regal Gampaha", city: "Gampaha", type: "2D / 3D", lat: 7.0870, lon: 79.9980 },
+            { name: "Majestic Cineplex", city: "Jaffna", type: "2D / 3D", lat: 9.6610, lon: 80.0250 },
+            { name: "New Imperial Cinema", city: "Anuradhapura", type: "2D / 3D", lat: 8.3440, lon: 80.4070 },
+            { name: "Imperial", city: "Ratnapura", type: "2D / 3D", lat: 6.6820, lon: 80.3990 },
+            { name: "Kool Cinema", city: "Batticaloa", type: "2D / 3D", lat: 7.7170, lon: 81.6980 },
+            { name: "Milano Cityplex", city: "Kegalle", type: "2D / 3D", lat: 7.2510, lon: 80.3460 }
+        ];
+
+        let map; let markersLayer; let userLocation = null;
+        const movieIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/2503/2503508.png', iconSize: [35, 35], iconAnchor: [17, 35], popupAnchor: [0, -35] });
+        const userIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149059.png', iconSize: [40, 40], iconAnchor: [20, 40], popupAnchor: [0, -40] });
+
+        function initMap() {
+            // Map always visible ekai size fix ekai
+            map = L.map('map').setView([7.8731, 80.7718], 7); 
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
+            markersLayer = L.featureGroup().addTo(map);
+            renderCinemasAndMap(cinemaData);
+            
+            // Map render unata passe size eka hadaganna kiyanawa
+            setTimeout(() => { map.invalidateSize(); }, 800);
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return (R * c).toFixed(1);
+        }
+
+        function renderCinemasAndMap(cinemasToRender) {
+            const cinemaGrid = document.getElementById('cinemaGrid');
+            cinemaGrid.innerHTML = ""; markersLayer.clearLayers();
+            if(cinemasToRender.length === 0) { cinemaGrid.innerHTML = "<p style='color:#888;'>No cinemas found matching your search.</p>"; return; }
+
+            if(userLocation) { L.marker([userLocation.lat, userLocation.lon], {icon: userIcon}).addTo(markersLayer).bindPopup("<b style='color:black; font-size:1.1rem;'>You are here!</b>"); }
+
+            cinemasToRender.forEach(cinema => {
+                let distText = ""; let rawDist = 9999;
+                if(userLocation) {
+                    rawDist = parseFloat(calculateDistance(userLocation.lat, userLocation.lon, cinema.lat, cinema.lon));
+                    distText = `<span class="distance"><i class="fas fa-route"></i> ${rawDist} km away</span>`;
+                    cinema.sortDist = rawDist; 
+                }
+                cinemaGrid.innerHTML += `
+                    <div class="cinema-box">
+                        <h3><i class="fas fa-video"></i> ${cinema.name}</h3>
+                        <p><i class="fas fa-map-marker-alt" style="width:20px;"></i> ${cinema.city}</p>
+                        <p><i class="fas fa-glasses" style="width:20px;"></i> ${cinema.type}</p>
+                        ${distText}
+                    </div>
+                `;
+                L.marker([cinema.lat, cinema.lon], {icon: movieIcon}).addTo(markersLayer).bindPopup(`<b style='color:black; font-size:1.2rem;'>🎬 ${cinema.name}</b><br><span style='color:#333; font-weight:600;'>${cinema.city}</span> ${userLocation ? '<br><span style="color:#e50914; font-weight:bold; font-size:1.1rem;">'+rawDist+' km</span>' : ''}`);
+            });
+            if(markersLayer.getLayers().length > 0) { map.flyToBounds(markersLayer.getBounds(), { padding: [50, 50], maxZoom: 14, duration: 1.5 }); }
+        }
+
+        function filterCinemas() {
+            const query = document.getElementById('cinemaSearchInput').value.toLowerCase();
+            let filtered = cinemaData.filter(c => c.name.toLowerCase().includes(query) || c.city.toLowerCase().includes(query));
+            if(userLocation) {
+                filtered.forEach(c => { c.sortDist = parseFloat(calculateDistance(userLocation.lat, userLocation.lon, c.lat, c.lon)); });
+                filtered.sort((a,b) => a.sortDist - b.sortDist);
+            }
+            renderCinemasAndMap(filtered);
+        }
+
+        function locateUser() {
+            const btn = document.getElementById('btnLocation');
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Locating...";
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+                        btn.innerHTML = "<i class='fas fa-check-circle'></i> Location Synced";
+                        btn.style.background = "linear-gradient(45deg, #25D366, #1ebe57)"; btn.style.borderColor = "transparent";
+                        filterCinemas(); 
+                    },
+                    (err) => {
+                        btn.innerHTML = "<i class='fas fa-exclamation-triangle'></i> Location Denied";
+                        btn.style.background = "linear-gradient(45deg, var(--accent-red), #b80710)";
+                        alert("Please allow location access to see accurate distances.");
+                    }
+                );
+            }
+        }
+
+        const modal = document.getElementById('movieModal');
+        function openModal(title, link = '#') {
+            document.getElementById('modalTitle').innerText = title;
+            const downloadBtn = document.getElementById('modalDownloadBtn');
+            downloadBtn.href = link;
+            if(link === '#') {
+                downloadBtn.onclick = function(e) { e.preventDefault(); alert('මේ ෆිල්ම් එකේ Download ලින්ක් එක තවම ඇතුලත් කරලා නැහැ! (Not added yet)'); };
+                downloadBtn.removeAttribute('target');
+            } else {
+                downloadBtn.onclick = null; downloadBtn.target = '_blank'; 
+            }
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10); 
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400); 
+        }
+        window.onclick = function(event) { if (event.target === modal) closeModal(); }
+    </script>
+</body>
+</html>
