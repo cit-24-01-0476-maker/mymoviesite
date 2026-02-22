@@ -171,7 +171,7 @@
         .request-form button { padding: 18px; background: linear-gradient(45deg, var(--accent-red), #ff2a35); color: white; border: none; border-radius: 15px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(229,9,20,0.4); }
         .request-form button:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(229,9,20,0.6); }
 
-        /* --- NEXT LEVEL: Premium Modal --- */
+        /* --- MODAL --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(15px); opacity: 0; transition: opacity 0.4s ease; }
         .modal-content { background: linear-gradient(145deg, #1a1a1a, #0a0a0a); width: 90%; max-width: 850px; border-radius: 25px; padding: 50px; position: relative; transform: scale(0.7) translateY(50px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 50px rgba(229,9,20,0.05); }
         .modal-overlay.active { opacity: 1; }
@@ -187,7 +187,7 @@
 
         footer { text-align: center; padding: 50px; background: #050505; color: #555; font-size: 0.95rem; margin-top: 60px; border-top: 1px solid #1a1a1a; position: relative; z-index: 2; }
         
-        /* --- 🚨 MOBILE RESPONSIVE FIXES (100% PERFECT FOR PHONES) 🚨 --- */
+        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
             header { padding: 15px 20px; flex-direction: row; }
             header.scrolled { padding: 10px 20px; }
@@ -363,7 +363,7 @@
             else header.classList.remove('scrolled');
         });
 
-        // --- 1. SINHALA MOVIES ---
+        // --- 1. SINHALA MOVIES (අලුත් ෆිල්ම්ස් 7 අගට එකතු කර ඇත) ---
         const sinhalaMoviesList = [
             { name: "නිමි (Nimi)", image: "images/nimi.jpg", link: "https://drive.google.com/file/d/1P_MWr6_x3FRw4eDgFrTIUGhfm6IUGHQ6/view?usp=sharing" }, 
             { name: "Zoom", image: "images/zoom.jpg" },
@@ -373,7 +373,14 @@
             { name: "ජංගි හොරා", image: "images/uderpantsthief.jpg" },
             { name: "ආලේ කොරෝනා", image: "images/aalecorona.jpg" }, 
             { name: "Ice Cream", image: "images/icecream.jpg", link: "https://drive.google.com/file/d/1zNkAmPmm0s1FrJKxnjBCMSJNPswiYP3C/view?usp=sharing" },
-            { name: "සූරියා (Soorya)", image: "images/soorya.jpg", link: "https://drive.google.com/file/d/1kptW9q_KMGrxoY3409ZRrP6_GD1qTPNd/view?usp=sharing" }
+            { name: "සූරියා (Soorya)", image: "images/soorya.jpg", link: "https://drive.google.com/file/d/1kptW9q_KMGrxoY3409ZRrP6_GD1qTPNd/view?usp=sharing" },
+            { name: "කදිර දිව්‍යරාජ (Kadira Divyaraja)", image: "images/kadira divyaraja.jpg" },
+            { name: "My Red Comrade", image: "images/my red comrade.jpg" },
+            { name: "පාස්පෝට් (Passport)", image: "images/passport.jpg" },
+            { name: "සීරුවෙන් (Seeruwenn)", image: "images/seeruwenn.jpg" },
+            { name: "සිහින නෙළුම් මල් (Sihina Nelum Mal)", image: "images/sihina nelum mal.jpg" },
+            { name: "වළම්පූරි (Walampoori)", image: "images/walampoori.jpg" },
+            { name: "ගිනි අවි සහ ගිනි කෙළි (Gini Awi Saha Gini Keli)", image: "images/gini awi saha gini keli.jpg" }
         ];
 
         // --- 2. HOLLYWOOD MOVIES ---
@@ -385,7 +392,7 @@
             { name: "Wake Up Dead Man", image: "hollywood/wakeup dead man.jpg" }, { name: "Marty Supreme", image: "hollywood/Marty Supreme.jpg" }
         ];
 
-        // --- 3. 18+ MOVIES --- 
+        // --- 3. 18+ MOVIES ---
         const adultMoviesList = [
             { name: "Belle de Jour", image: "adult/Belle de Jour.jpg", link: "https://drive.google.com/file/d/1PM4AIVa1e3mbUybHwLgkG1Ozz9jJcu-D/view?usp=sharing" }, 
             { name: "Great Expectations", image: "adult/Great ExpectatioNs.jpg", link: "https://drive.google.com/file/d/17Bqn36gg9cln7PueeGt0W7spc6m6PhSy/view?usp=sharing" }, 
