@@ -47,10 +47,10 @@
         /* --- 🚨 FIX: PREMIUM GLASSMORPHISM HEADER 🚨 --- */
         header { position: fixed; top: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: all 0.4s ease; background: transparent; }
         header.scrolled { 
-            background: rgba(10, 10, 10, 0.6); /* Softer transparent black */
-            backdrop-filter: blur(25px); /* Strong blur for premium glass effect */
+            background: rgba(10, 10, 10, 0.6); 
+            backdrop-filter: blur(25px); 
             -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(229, 9, 20, 0.3); /* Subtle red glowing line */
+            border-bottom: 1px solid rgba(229, 9, 20, 0.3); 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
             padding: 12px 40px; 
         }
@@ -68,6 +68,7 @@
         .hero { height: 95vh; background: linear-gradient(to top, var(--bg-color) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; background-attachment: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; position: relative; overflow: hidden; }
         .hero::after { content:''; position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(to top, var(--bg-color), transparent); z-index: 1; }
         
+        /* NEXT LEVEL: Cinematic Particles */
         .particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .particle { position: absolute; background: rgba(255,255,255,0.5); border-radius: 50%; animation: floatUp linear infinite; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
@@ -75,6 +76,7 @@
         .hero-content { z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; animation: fadeInDown 1.5s ease; }
         @keyframes fadeInDown { 0% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 1; transform: translateY(0); } }
         
+        /* NEXT LEVEL: Glowing Text */
         @keyframes textGlow { 0% { text-shadow: 0 0 10px rgba(229,9,20,0.5); } 100% { text-shadow: 0 0 30px rgba(229,9,20,0.9), 0 0 10px rgba(255,255,255,0.3); } }
         .hero h1 { font-size: 5.5rem; font-weight: 800; margin-bottom: 15px; line-height: 1.1; letter-spacing: -2px; animation: textGlow 2.5s infinite alternate; }
         .hero p { font-size: 1.4rem; color: #ddd; margin-bottom: 40px; font-weight: 300; text-shadow: 1px 2px 8px rgba(0,0,0,0.9); }
@@ -84,7 +86,7 @@
             display: flex; 
             width: 100%; 
             max-width: 700px; 
-            margin: 0 auto; /* Ensures it perfectly centers */
+            margin: 0 auto; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.1); 
             border-radius: 50px; 
             overflow: hidden; 
@@ -118,7 +120,7 @@
 
         /* --- PREMIUM MOVIE CARDS --- */
         .movie-card { flex: 0 0 auto; width: 220px; cursor: pointer; position: relative; border-radius: 15px; overflow: hidden; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(0,0,0,0.6); background: #111; }
-        .movie-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-25deg); transition: 0.7s ease; z-index: 5; pointer-events: none; }
+        .movie-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-25deg); transition: 0.7s ease; z-index: 5; pointer-events: none; }
         .movie-card:hover::before { left: 150%; }
 
         .movie-card img { width: 100%; height: 330px; object-fit: cover; transition: transform 0.6s ease; }
@@ -139,7 +141,7 @@
         .btn-location { background: linear-gradient(45deg, #1a1a1a, #222); color: white; padding: 16px 30px; border: 1px solid #444; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
         .btn-location:hover { background: linear-gradient(45deg, var(--accent-red), #ff2a35); border-color: transparent; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(229,9,20,0.5); }
         .cinema-search-input { flex: 1; padding: 16px 30px; border-radius: 30px; border: 1px solid #444; background: rgba(15,15,15,0.8); color: white; font-size: 1.05rem; outline: none; transition: 0.3s; backdrop-filter: blur(10px); }
-        .cinema-search-input:focus { border-color: var(--accent-red); box-shadow: 0 0 20px rgba(229,9,20,0.2); background: #050505; }
+        .cinema-search-input:focus { border-color: var(--accent-red); box-shadow: 0 0 20px rgba(229,9,20,0.2); background: #000; }
         
         /* 🚨 FIX: Map Grey Box issue fixed by making it always display: block 🚨 */
         #map { 
@@ -150,7 +152,7 @@
             z-index: 1; 
             border: 1px solid rgba(255,255,255,0.08); 
             box-shadow: 0 15px 40px rgba(0,0,0,0.7); 
-            display: block !important; /* Force visible to prevent rendering bugs */
+            display: block !important; 
         }
         .leaflet-popup-content-wrapper { background: rgba(15,15,15,0.95); backdrop-filter: blur(5px); color: white; border-radius: 12px; border: 1px solid var(--accent-red); box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
         .leaflet-popup-tip { background: #0f0f0f; border: 1px solid var(--accent-red); }
@@ -174,9 +176,9 @@
         .updates-list li i { color: var(--accent-red); font-size: 1.3rem; text-shadow: 0 0 10px rgba(229,9,20,0.5); }
         
         .request-form { display: flex; flex-direction: column; gap: 25px; }
-        .request-form input { padding: 20px 25px; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; background: rgba(0,0,0,0.6); color: white; outline: none; transition: 0.3s; font-size: 1.05rem; }
+        .request-form input { padding: 18px 25px; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; background: rgba(0,0,0,0.6); color: white; outline: none; transition: 0.3s; font-size: 1.05rem; }
         .request-form input:focus { border-color: var(--accent-red); box-shadow: 0 0 20px rgba(229,9,20,0.2); background: #000; }
-        .request-form button { padding: 20px; background: linear-gradient(45deg, var(--accent-red), #ff2a35); color: white; border: none; border-radius: 15px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(229,9,20,0.4); }
+        .request-form button { padding: 18px; background: linear-gradient(45deg, var(--accent-red), #ff2a35); color: white; border: none; border-radius: 15px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(229,9,20,0.4); }
         .request-form button:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(229,9,20,0.6); }
 
         /* --- NEXT LEVEL: Premium Modal --- */
@@ -341,11 +343,15 @@
 
         // --- 1. SINHALA MOVIES ---
         const sinhalaMoviesList = [
-            { name: "නිමි (Nimi)", image: "images/nimi.jpg" }, { name: "Zoom", image: "images/zoom.jpg" },
-            { name: "තට්ටු දෙකේ ඉස්කෝලේ", image: "images/tattudekeiskole.jpg" }, { name: "යූ ටර්න් (U Turn)", image: "images/uturn.jpg" },
-            { name: "ආදරණීය කතාවක්", image: "images/adaraniyakathwk.jpg" }, { name: "ජංගි හොරා", image: "images/uderpantsthief.jpg" },
-            { name: "ආලේ කොරෝනා", image: "images/aalecorona.jpg" }, { name: "Ice Cream", image: "images/icecream.jpg" },
-            { name: "සූරියා (Soorya)", image: "images/soorya.jpg" }
+            { name: "නිමි (Nimi)", image: "images/nimi.jpg", link: "https://drive.google.com/file/d/1P_MWr6_x3FRw4eDgFrTIUGhfm6IUGHQ6/view?usp=sharing" }, 
+            { name: "Zoom", image: "images/zoom.jpg" },
+            { name: "තට්ටු දෙකේ ඉස්කෝලේ", image: "images/tattudekeiskole.jpg", link: "https://drive.google.com/file/d/1XI8lDvMu4uoNliwfQXsM0txMtr8m-RmK/view?usp=sharing" }, 
+            { name: "යූ ටර්න් (U Turn)", image: "images/uturn.jpg", link: "https://drive.google.com/file/d/1qo2eI5VnS9pMdDm03rK1qzLZjPYk3ljt/view?usp=sharing" },
+            { name: "ආදරණීය කතාවක්", image: "images/adaraniyakathwk.jpg", link: "https://drive.google.com/file/d/1YNbdUTS6ckKC2X3Uw03Rc1jK9v-rJjaw/view?usp=sharing" }, 
+            { name: "ජංගි හොරා", image: "images/uderpantsthief.jpg" },
+            { name: "ආලේ කොරෝනා", image: "images/aalecorona.jpg" }, 
+            { name: "Ice Cream", image: "images/icecream.jpg", link: "https://drive.google.com/file/d/1zNkAmPmm0s1FrJKxnjBCMSJNPswiYP3C/view?usp=sharing" },
+            { name: "සූරියා (Soorya)", image: "images/soorya.jpg", link: "https://drive.google.com/file/d/1kptW9q_KMGrxoY3409ZRrP6_GD1qTPNd/view?usp=sharing" }
         ];
 
         // --- 2. HOLLYWOOD MOVIES ---
@@ -357,7 +363,7 @@
             { name: "Wake Up Dead Man", image: "hollywood/wakeup dead man.jpg" }, { name: "Marty Supreme", image: "hollywood/Marty Supreme.jpg" }
         ];
 
-        // --- 3. 18+ MOVIES (Google Drive Links Added) ---
+        // --- 3. 18+ MOVIES --- 
         const adultMoviesList = [
             { name: "Belle de Jour", image: "adult/Belle de Jour.jpg", link: "https://drive.google.com/file/d/1PM4AIVa1e3mbUybHwLgkG1Ozz9jJcu-D/view?usp=sharing" }, 
             { name: "Great Expectations", image: "adult/Great ExpectatioNs.jpg", link: "https://drive.google.com/file/d/17Bqn36gg9cln7PueeGt0W7spc6m6PhSy/view?usp=sharing" }, 
@@ -373,6 +379,7 @@
             { name: "Uncle Tom Cabin", image: "adult/Uncle Tom Cabin.jpg" } 
         ];
 
+        // Function to render any movie list
         function renderMovies(containerId, movieList, isAdult = false) {
             const container = document.getElementById(containerId);
             let html = '';
@@ -398,7 +405,7 @@
         renderMovies('english-movies', hollywoodMoviesList);
         renderMovies('adult-movies', adultMoviesList, true); 
 
-        // --- FULL SRI LANKA CINEMAS DATA WITH REAL GPS COORDINATES ---
+        // --- FULL SRI LANKA CINEMAS DATA ---
         const cinemaData = [
             { name: "Scope Cinemas - CCC", city: "Colombo", type: "IMAX / 3D", lat: 6.9240, lon: 79.8500 },
             { name: "Liberty By Scope", city: "Kollupitiya", type: "2D / 3D", lat: 6.9080, lon: 79.8510 },
@@ -426,13 +433,12 @@
         const userIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149059.png', iconSize: [40, 40], iconAnchor: [20, 40], popupAnchor: [0, -40] });
 
         function initMap() {
-            // Map always visible ekai size fix ekai
             map = L.map('map').setView([7.8731, 80.7718], 7); 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
             markersLayer = L.featureGroup().addTo(map);
             renderCinemasAndMap(cinemaData);
             
-            // Map render unata passe size eka hadaganna kiyanawa
+            // Map fix for rendering issue
             setTimeout(() => { map.invalidateSize(); }, 800);
         }
 
