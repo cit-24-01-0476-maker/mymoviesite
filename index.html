@@ -68,6 +68,7 @@
         .hero { height: 95vh; background: linear-gradient(to top, var(--bg-color) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; background-attachment: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; position: relative; overflow: hidden; }
         .hero::after { content:''; position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(to top, var(--bg-color), transparent); z-index: 1; }
         
+        /* NEXT LEVEL: Cinematic Particles */
         .particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .particle { position: absolute; background: rgba(255,255,255,0.5); border-radius: 50%; animation: floatUp linear infinite; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
@@ -75,6 +76,7 @@
         .hero-content { z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; animation: fadeInDown 1.5s ease; }
         @keyframes fadeInDown { 0% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 1; transform: translateY(0); } }
         
+        /* NEXT LEVEL: Glowing Text */
         @keyframes textGlow { 0% { text-shadow: 0 0 10px rgba(229,9,20,0.5); } 100% { text-shadow: 0 0 30px rgba(229,9,20,0.9), 0 0 10px rgba(255,255,255,0.3); } }
         .hero h1 { font-size: 5.5rem; font-weight: 800; margin-bottom: 15px; line-height: 1.1; letter-spacing: -2px; animation: textGlow 2.5s infinite alternate; }
         .hero p { font-size: 1.4rem; color: #ddd; margin-bottom: 40px; font-weight: 300; text-shadow: 1px 2px 8px rgba(0,0,0,0.9); }
@@ -106,7 +108,7 @@
         .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- SECTIONS & 🚨 FIX: GRID CAROUSEL FOR MULTI-ROWS 🚨 --- */
+        /* --- SECTIONS & GRID CAROUSEL --- */
         section { padding: 70px 40px; position: relative; z-index: 2; }
         .section-title { font-size: 2rem; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; letter-spacing: 0.5px; }
         .section-title i { color: var(--accent-red); text-shadow: 0 0 15px rgba(229,9,20,0.8); font-size: 2.2rem; }
@@ -188,7 +190,7 @@
 
         footer { text-align: center; padding: 50px; background: #050505; color: #555; font-size: 0.95rem; margin-top: 60px; border-top: 1px solid #1a1a1a; position: relative; z-index: 2; }
         
-        /* --- 🚨 MOBILE RESPONSIVE FIXES (PERFECT MOBILE GRID) 🚨 --- */
+        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
             header { padding: 15px 20px; flex-direction: row; }
             header.scrolled { padding: 10px 20px; }
@@ -208,12 +210,7 @@
             .search-bar button { border-radius: 15px; padding: 15px 20px; font-size: 1rem;}
             .search-bar::before { display: none; }
 
-            /* 🚨 Mobile Movie Grid Fix 🚨 */
-            .carousel { 
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-                gap: 15px; 
-                padding-left: 0;
-            }
+            .carousel { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding-left: 0; }
             .movie-card { width: 100%; border-radius: 10px;}
             .movie-card img { height: 220px; }
             .movie-card h4 { font-size: 0.9rem; padding: 20px 5px 10px; bottom: -45px; }
@@ -370,24 +367,24 @@
             else header.classList.remove('scrolled');
         });
 
-        // --- 1. SINHALA MOVIES (All new ones added here) ---
+        // --- 1. SINHALA MOVIES (ඔක්කොම අලුත් ලින්ක් ටික අප්ඩේට් කර ඇත) ---
         const sinhalaMoviesList = [
             { name: "නිමි (Nimi)", image: "images/nimi.jpg", link: "https://drive.google.com/file/d/1P_MWr6_x3FRw4eDgFrTIUGhfm6IUGHQ6/view?usp=sharing" }, 
             { name: "Zoom", image: "images/zoom.jpg" },
             { name: "තට්ටු දෙකේ ඉස්කෝලේ", image: "images/tattudekeiskole.jpg", link: "https://drive.google.com/file/d/1XI8lDvMu4uoNliwfQXsM0txMtr8m-RmK/view?usp=sharing" }, 
             { name: "යූ ටර්න් (U Turn)", image: "images/uturn.jpg", link: "https://drive.google.com/file/d/1qo2eI5VnS9pMdDm03rK1qzLZjPYk3ljt/view?usp=sharing" },
             { name: "ආදරණීය කතාවක්", image: "images/adaraniyakathwk.jpg", link: "https://drive.google.com/file/d/1YNbdUTS6ckKC2X3Uw03Rc1jK9v-rJjaw/view?usp=sharing" }, 
-            { name: "ජංගි හොරා", image: "images/uderpantsthief.jpg" },
-            { name: "ආලේ කොරෝනා", image: "images/aalecorona.jpg" }, 
+            { name: "ජංගි හොරා", image: "images/uderpantsthief.jpg", link: "https://drive.google.com/file/d/1gyu_R6oVq5IANYyH6jaWSJusBJU2mXos/view?usp=sharing" },
+            { name: "ආලේ කොරෝනා", image: "images/aalecorona.jpg", link: "https://drive.google.com/file/d/179v0_uUglkGdS7yg8uITWLv2cPPamDRe/view?usp=sharing" }, 
             { name: "Ice Cream", image: "images/icecream.jpg", link: "https://drive.google.com/file/d/1zNkAmPmm0s1FrJKxnjBCMSJNPswiYP3C/view?usp=sharing" },
             { name: "සූරියා (Soorya)", image: "images/soorya.jpg", link: "https://drive.google.com/file/d/1kptW9q_KMGrxoY3409ZRrP6_GD1qTPNd/view?usp=sharing" },
-            { name: "කදිර දිව්‍යරාජ (Kadira Divyaraja)", image: "images/kadira divyaraja.jpg" },
-            { name: "My Red Comrade", image: "images/my red comrade.jpg" },
-            { name: "පාස්පෝට් (Passport)", image: "images/passport.jpg" },
-            { name: "සීරුවෙන් (Seeruwenn)", image: "images/seeruwenn.jpg" },
-            { name: "සිහින නෙළුම් මල් (Sihina Nelum Mal)", image: "images/sihina nelum mal.jpg" },
-            { name: "වළම්පූරි (Walampoori)", image: "images/walampoori.jpg" },
-            { name: "ගිනි අවි සහ ගිනි කෙළි (Gini Awi Saha Gini Keli)", image: "images/gini awi saha gini keli.jpg" }
+            { name: "කදිර දිව්‍යරාජ (Kadira Divyaraja)", image: "images/kadira divyaraja.jpg", link: "https://drive.google.com/file/d/163ZLGCOzcJaG4SqilecAmNhjDsMiMMLO/view?usp=sharing" },
+            { name: "My Red Comrade", image: "images/my red comrade.jpg", link: "https://drive.google.com/file/d/1BwNZdWfLNSTUshO4XYRMhH5v8vYKl6-a/view?usp=sharing" },
+            { name: "පාස්පෝට් (Passport)", image: "images/passport.jpg", link: "https://drive.google.com/file/d/1zkbX6GOGv27_yc7AD_NTR2-jBT0QgQ_T/view?usp=sharing" },
+            { name: "සීරුවෙන් (Seeruwenn)", image: "images/seeruwenn.jpg", link: "https://drive.google.com/file/d/1RlD41BF2sLUVNgMbBFYgfad0dAVG5JRG/view?usp=sharing" },
+            { name: "සිහින නෙළුම් මල් (Sihina Nelum Mal)", image: "images/sihina nelum mal.jpg", link: "https://drive.google.com/file/d/1z41IiHNZKk7MNSfYswpBAudHLhcCPO9o/view?usp=sharing" },
+            { name: "වළම්පූරි (Walampoori)", image: "images/walampoori.jpg", link: "https://drive.google.com/file/d/1Jks1FNGYkRBzp84Wm3ecvSnfZ4CdyfJi/view?usp=sharing" },
+            { name: "ගිනි අවි සහ ගිනි කෙළි (Gini Awi Saha Gini Keli)", image: "images/gini awi saha gini keli.jpg", link: "https://drive.google.com/file/d/1ws4Sk_A81miIzlplCjlcegQxrKaczc_L/view?usp=sharing" }
         ];
 
         // --- 2. HOLLYWOOD MOVIES ---
