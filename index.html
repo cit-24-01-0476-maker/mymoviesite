@@ -121,7 +121,7 @@
             padding-top: 20px; 
         }
 
-        /* --- 🚨 NEW: PREMIUM RATINGS & QUALITY TAGS 🚨 --- */
+        /* --- PREMIUM RATINGS & QUALITY TAGS --- */
         .card-tags { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 4; }
         .tag-rating { background: rgba(0, 0, 0, 0.7); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; backdrop-filter: blur(5px); border: 1px solid rgba(255,215,0,0.3); display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         .tag-rating i { color: #ffd700; font-size: 0.7rem; }
@@ -187,10 +187,11 @@
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
         .close-btn { position: absolute; top: 25px; right: 30px; font-size: 2rem; cursor: pointer; color: #888; transition: all 0.3s; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: rgba(255,255,255,0.05); }
         .close-btn:hover { color: white; background: var(--accent-red); transform: rotate(90deg); box-shadow: 0 0 15px var(--accent-red); }
+        
+        /* 🚨 FIX: Iframe Video Container 🚨 */
         .trailer-placeholder { width: 100%; height: 450px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover; display: flex; justify-content: center; align-items: center; border-radius: 20px; margin: 30px 0; position: relative; box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
         .trailer-placeholder::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle, transparent, rgba(0,0,0,0.7)); pointer-events: none; }
-        .trailer-placeholder i { font-size: 6rem; color: rgba(255,255,255,0.9); z-index: 2; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9)); }
-        .trailer-placeholder i:hover { transform: scale(1.2); color: var(--accent-red); filter: drop-shadow(0 0 30px var(--accent-red)); }
+        
         .btn-download { display: flex; justify-content: center; align-items: center; gap: 12px; background: linear-gradient(45deg, #4285F4, #1a53bd); color: white; padding: 20px; border-radius: 15px; font-weight: 600; text-align: center; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 8px 25px rgba(66, 133, 244, 0.4); border: 1px solid rgba(255,255,255,0.1); }
         .btn-download:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(66, 133, 244, 0.7); background: linear-gradient(45deg, #5b9aff, #2b6add); }
 
@@ -235,7 +236,6 @@
             #modalTitle { font-size: 1.8rem; }
             .close-btn { top: 10px; right: 10px; width: 35px; height: 35px; font-size: 1.5rem; }
             .trailer-placeholder { height: 220px; margin: 15px 0; border-radius: 10px; }
-            .trailer-placeholder i { font-size: 4rem; }
             .btn-download { padding: 15px; font-size: 1rem; border-radius: 10px; }
         }
     </style>
@@ -322,7 +322,11 @@
             <h2 id="modalTitle" style="font-size: 2.5rem; margin-bottom: 5px;">Movie Title</h2>
             <p style="color: var(--accent-red); margin-bottom: 20px; font-weight: 600; letter-spacing: 2px; font-size: 0.9rem;">2024 • PREMIUM RIP • 4K UHD</p>
             <p style="font-size: 1.1rem; line-height: 1.8; color: #ccc;"><strong>Synopsis:</strong> An epic journey through space and time to save humanity from the brink of extinction. Featuring breathtaking visuals and heart-pounding action sequences.</p>
-            <div class="trailer-placeholder"><i class="fas fa-play-circle"></i></div>
+            
+            <div class="trailer-placeholder" id="modalVideoContainer">
+                <i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>
+            </div>
+            
             <a href="#" id="modalDownloadBtn" class="btn-download"><i class="fab fa-google-drive" style="font-size: 1.5rem;"></i> Download via Google Drive</a>
         </div>
     </div>
@@ -413,7 +417,6 @@
             { name: "Uncle Tom Cabin", image: "adult/Uncle Tom Cabin.jpg" } 
         ];
 
-        // 🚨 FIX: Added dynamic Ratings & Quality Tags to renderMovies 🚨
         function renderMovies(containerId, movieList, isAdult = false) {
             const container = document.getElementById(containerId);
             let html = '';
@@ -423,7 +426,6 @@
                 const safeName = movie.name.replace(/'/g, "\\'");
                 const movieLink = movie.link ? movie.link : '#';
                 
-                // Generate random realistic ratings & qualities for Premium Look
                 const rating = (Math.random() * (9.5 - 6.5) + 6.5).toFixed(1);
                 const qualities = ["1080p WebRip", "4K UHD", "Blu-Ray", "HD CAM"];
                 const quality = qualities[Math.floor(Math.random() * qualities.length)];
@@ -448,36 +450,25 @@
         renderMovies('english-movies', hollywoodMoviesList);
         renderMovies('adult-movies', adultMoviesList, true); 
 
-        // 🚨 FIX: Live Search Engine Logic 🚨
         function liveSearchMovies() {
             const query = document.getElementById('mainSearchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.movie-card');
-            
             cards.forEach(card => {
                 const title = card.getAttribute('data-title');
-                if(title.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                if(title.includes(query)) { card.style.display = 'block'; } else { card.style.display = 'none'; }
             });
         }
 
-        // 🚨 FIX: Working Request Form Logic (Visual Feedback) 🚨
         function submitMovieRequest(event) {
             event.preventDefault();
             const btn = document.getElementById('reqSubmitBtn');
-            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             btn.style.background = '#ff2a35';
-            
             setTimeout(() => {
                 btn.innerHTML = '<i class="fas fa-check-circle"></i> Request Sent Successfully!';
                 btn.style.background = 'linear-gradient(45deg, #25D366, #1ebe57)';
                 btn.style.boxShadow = '0 8px 20px rgba(37, 211, 102, 0.4)';
-                
                 document.getElementById('movieRequestForm').reset();
-                
                 setTimeout(() => {
                     btn.innerHTML = 'Submit Request <i class="fas fa-paper-plane"></i>';
                     btn.style.background = 'linear-gradient(45deg, var(--accent-red), #ff2a35)';
@@ -486,7 +477,6 @@
             }, 1500);
         }
 
-        // --- FULL SRI LANKA CINEMAS DATA ---
         const cinemaData = [
             { name: "Scope Cinemas - CCC", city: "Colombo", type: "IMAX / 3D", lat: 6.9240, lon: 79.8500 },
             { name: "Liberty By Scope", city: "Kollupitiya", type: "2D / 3D", lat: 6.9080, lon: 79.8510 },
@@ -518,7 +508,6 @@
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
             markersLayer = L.featureGroup().addTo(map);
             renderCinemasAndMap(cinemaData);
-            
             setTimeout(() => { map.invalidateSize(); }, 800);
         }
 
@@ -587,16 +576,30 @@
             }
         }
 
+        // 🚨 FIX: Live Streaming Video Logic 🚨
         const modal = document.getElementById('movieModal');
         function openModal(title, link = '#') {
             document.getElementById('modalTitle').innerText = title;
             const downloadBtn = document.getElementById('modalDownloadBtn');
+            const videoContainer = document.getElementById('modalVideoContainer');
+            
             downloadBtn.href = link;
+            
             if(link === '#') {
                 downloadBtn.onclick = function(e) { e.preventDefault(); alert('මේ ෆිල්ම් එකේ Download ලින්ක් එක තවම ඇතුලත් කරලා නැහැ! (Not added yet)'); };
                 downloadBtn.removeAttribute('target');
+                videoContainer.innerHTML = '<i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>';
             } else {
                 downloadBtn.onclick = null; downloadBtn.target = '_blank'; 
+                
+                // Extract Google Drive ID to create an iframe for live streaming
+                const match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if(match && match[1]) {
+                    const driveId = match[1];
+                    videoContainer.innerHTML = `<iframe src="https://drive.google.com/file/d/${driveId}/preview" style="width: 100%; height: 100%; border: none; border-radius: 20px; box-shadow: inset 0 0 60px rgba(0,0,0,0.9);" allow="autoplay; fullscreen"></iframe>`;
+                } else {
+                    videoContainer.innerHTML = '<i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>';
+                }
             }
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10); 
@@ -604,7 +607,11 @@
 
         function closeModal() {
             modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 400); 
+            // Clear iframe when closing modal to stop background video playing
+            setTimeout(() => { 
+                modal.style.display = 'none'; 
+                document.getElementById('modalVideoContainer').innerHTML = '<i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>';
+            }, 400); 
         }
         window.onclick = function(event) { if (event.target === modal) closeModal(); }
     </script>
