@@ -177,43 +177,41 @@
         .request-form button:hover { background: #e0e0e0; transform: translateY(-2px); }
 
         /* --- NEXT LEVEL MODAL --- */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.4s var(--smooth-curve); }
-        .modal-content { background: #0a0a0a; width: 95%; max-width: 900px; border-radius: 16px; padding: 40px; position: relative; transform: scale(0.95) translateY(20px); transition: all 0.4s var(--smooth-curve); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 25px 60px rgba(0,0,0,1); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.4s var(--smooth-curve); }
+        .modal-content { background: linear-gradient(145deg, #1a1a1a, #0a0a0a); width: 90%; max-width: 850px; border-radius: 25px; padding: 50px; position: relative; transform: scale(0.7) translateY(50px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 50px rgba(229,9,20,0.05); }
         .modal-overlay.active { opacity: 1; }
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #888; transition: all 0.3s; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: rgba(255,255,255,0.05); }
-        .close-btn:hover { color: white; background: rgba(255,255,255,0.1); transform: rotate(90deg); }
+        .close-btn { position: absolute; top: 25px; right: 30px; font-size: 2rem; cursor: pointer; color: #888; transition: all 0.3s; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: rgba(255,255,255,0.05); }
+        .close-btn:hover { color: white; background: var(--accent-red); transform: rotate(90deg); box-shadow: 0 0 15px var(--accent-red); }
         
-        #modalTitle { font-size: 2.2rem; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.5px; }
-        
-        /* 🚨 OLD TRAILER STYLE (Restored) 🚨 */
         .trailer-placeholder { width: 100%; height: 450px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover; display: flex; justify-content: center; align-items: center; border-radius: 20px; margin: 30px 0; position: relative; box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
         .trailer-placeholder::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle, transparent, rgba(0,0,0,0.7)); pointer-events: none; }
         .trailer-placeholder i { font-size: 6rem; color: rgba(255,255,255,0.9); z-index: 2; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9)); }
         .trailer-placeholder i:hover { transform: scale(1.2); color: var(--accent-red); filter: drop-shadow(0 0 30px var(--accent-red)); }
         
-        .btn-download { display: flex; justify-content: center; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); color: white; padding: 18px; border-radius: 10px; font-weight: 500; font-size: 1.1rem; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-download:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+        .btn-download { display: flex; justify-content: center; align-items: center; gap: 12px; background: linear-gradient(45deg, #4285F4, #1a53bd); color: white; padding: 20px; border-radius: 15px; font-weight: 600; text-align: center; font-size: 1.2rem; transition: all 0.3s; box-shadow: 0 8px 25px rgba(66, 133, 244, 0.4); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-download:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(66, 133, 244, 0.7); background: linear-gradient(45deg, #5b9aff, #2b6add); }
 
-        footer { text-align: center; padding: 40px 20px; background: transparent; color: #666; font-size: 0.9rem; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+        footer { text-align: center; padding: 50px; background: #050505; color: #555; font-size: 0.95rem; margin-top: 60px; border-top: 1px solid #1a1a1a; position: relative; z-index: 2; }
         
         /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
+            header { padding: 15px 20px; flex-direction: row; }
             header.scrolled { padding: 10px 20px; }
             .logo { font-size: 1.6rem; }
-            .btn-whatsapp { padding: 8px 16px; font-size: 0.85rem; }
+            .btn-whatsapp { padding: 8px 15px; font-size: 0.85rem; }
             nav ul { display: none; }
 
-            section { padding: 40px 20px; }
-            .section-title { font-size: 1.4rem; margin-bottom: 20px; }
+            section { padding: 40px 15px; }
+            .section-title { font-size: 1.5rem; margin-bottom: 20px; }
+            .section-title i { font-size: 1.6rem; }
 
-            .hero h1 { font-size: 2.8rem; letter-spacing: -1px; }
-            .hero p { font-size: 1rem; margin-bottom: 30px; }
+            .hero h1 { font-size: 2.5rem; letter-spacing: 0; }
+            .hero p { font-size: 1rem; margin-bottom: 25px; padding: 0 10px; }
             
-            .search-bar { border-radius: 15px; flex-direction: column; background: transparent; box-shadow: none; border: none; }
-            .search-bar input { border-radius: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 15px 20px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.1); }
-            .search-bar button { border-radius: 12px; padding: 15px; font-size: 1rem; justify-content: center; }
+            .search-bar { border-radius: 20px; flex-direction: column; background: transparent; box-shadow: none; border: none; }
+            .search-bar input { border-radius: 15px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 15px 20px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.1); }
+            .search-bar button { border-radius: 15px; padding: 15px 20px; font-size: 1rem; justify-content: center; }
 
             .carousel { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
             .movie-card img { height: 230px; }
@@ -228,11 +226,12 @@
             .flex-container { gap: 20px; flex-direction: column; }
             .updates-box, .request-box { padding: 25px 20px; border-radius: 12px; }
 
-            .modal-content { padding: 25px 20px; border-radius: 16px; }
-            #modalTitle { font-size: 1.6rem; }
+            .modal-content { padding: 30px 20px; width: 95%; border-radius: 15px; }
+            #modalTitle { font-size: 1.8rem; }
             .close-btn { top: 15px; right: 15px; width: 30px; height: 30px; font-size: 1.2rem; }
-            .trailer-placeholder { height: 220px; margin: 15px 0; border-radius: 8px; } 
-            .btn-download { padding: 15px; font-size: 1rem; border-radius: 8px; }
+            .trailer-placeholder { height: 220px; margin: 15px 0; border-radius: 10px; }
+            .trailer-placeholder i { font-size: 4rem; }
+            .btn-download { padding: 15px; font-size: 1rem; border-radius: 10px; }
         }
     </style>
 </head>
@@ -250,7 +249,7 @@
                 <li><a href="#updates">Updates</a></li>
             </ul>
         </nav>
-        <a href="https://chat.whatsapp.com/H0XZCQ1UJ6UIQm2LLa4Qwt" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp" style="font-size:1.3rem;"></i> Join Group</a>
+        <a href="https://chat.whatsapp.com/H0XZCQ1UJ6UIQm2LLa4Qwt" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp" style="font-size:1.4rem;"></i> Join Group</a>
     </header>
 
     <section class="hero" id="hero">
@@ -372,7 +371,7 @@
             else header.classList.remove('scrolled');
         });
 
-        // --- 1. SINHALA MOVIES (ALL NEW MOVIES ADDED) ---
+        // --- 1. SINHALA MOVIES (ALL LINKS UPDATED) ---
         const sinhalaMoviesList = [
             { name: "නිමි (Nimi)", image: "images/nimi.jpg", link: "https://drive.google.com/file/d/1P_MWr6_x3FRw4eDgFrTIUGhfm6IUGHQ6/view?usp=sharing" }, 
             { name: "Zoom", image: "images/zoom.jpg" },
@@ -397,7 +396,7 @@
             { name: "Maya", image: "images/maya.jpg", link: "https://drive.google.com/file/d/16f7fKxl-E4kY2xd73K7vo36lHTdl_cO2/view?usp=sharing" }
         ];
 
-        // --- 2. HOLLYWOOD MOVIES (56 Days Added) ---
+        // --- 2. HOLLYWOOD MOVIES (56 Days LINK UPDATED) ---
         const hollywoodMoviesList = [
             { name: "28 Years Later", image: "hollywood/28 Years Later The Bone Temple.jpg", link: "https://drive.google.com/file/d/1DwojxBuP7mM3RvhgvEFwd2xB-3y6rjeT/view?usp=sharing" }, 
             { name: "Anaconda", image: "hollywood/anaconda.jpg", link: "https://drive.google.com/file/d/1EnxzyZB1OW6S1p1GiL5zF7jvAPYe6B7d/view?usp=sharing" },
