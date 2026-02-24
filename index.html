@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyMovieSite - Premium Streaming</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -398,7 +398,7 @@
             { name: "ගිනි අවි සහ ගිනි කෙළි (Gini Awi Saha Gini Keli)", image: "images/gini awi saha gini keli.jpg", link: "https://drive.google.com/file/d/1ws4Sk_A81miIzlplCjlcegQxrKaczc_L/view?usp=sharing" }
         ];
 
-        // --- 2. HOLLYWOOD MOVIES (ලින්ක් එකතු කර ඇත) ---
+        // --- 2. HOLLYWOOD MOVIES (NEW "56 Days" Added) ---
         const hollywoodMoviesList = [
             { name: "28 Years Later", image: "hollywood/28 Years Later The Bone Temple.jpg", link: "https://drive.google.com/file/d/1DwojxBuP7mM3RvhgvEFwd2xB-3y6rjeT/view?usp=sharing" }, 
             { name: "Anaconda", image: "hollywood/anaconda.jpg", link: "https://drive.google.com/file/d/1EnxzyZB1OW6S1p1GiL5zF7jvAPYe6B7d/view?usp=sharing" },
@@ -409,7 +409,8 @@
             { name: "Sisu: Road to Revenge", image: "hollywood/sisu road to revenge.jpg", link: "https://drive.google.com/file/d/1E4FvU8NH44xJxhTGCIzlyMsurf-Rzf3f/view?usp=sharing" }, 
             { name: "Tron: Ares", image: "hollywood/tron areas.jpg", link: "https://drive.google.com/file/d/1qBch57C3un6RmKd1I1Gm6yh9R7rlYLKp/view?usp=sharing" },
             { name: "Wake Up Dead Man", image: "hollywood/wakeup dead man.jpg", link: "https://drive.google.com/file/d/1DMnvsxfp_1cpzM07sW1OcO5OsxNLkG3q/view?usp=sharing" }, 
-            { name: "Marty Supreme", image: "hollywood/Marty Supreme.jpg", link: "https://drive.google.com/file/d/1YW58oA0zBc7m2nODDANj52HJ3j_Xluox/view?usp=sharing" }
+            { name: "Marty Supreme", image: "hollywood/Marty Supreme.jpg", link: "https://drive.google.com/file/d/1YW58oA0zBc7m2nODDANj52HJ3j_Xluox/view?usp=sharing" },
+            { name: "56 Days", image: "hollywood/56 days.jpg" } 
         ];
 
         // --- 3. 18+ MOVIES ---
@@ -597,9 +598,9 @@
             downloadBtn.href = link;
             
             if(link === '#') {
-                downloadBtn.onclick = function(e) { e.preventDefault(); alert('Movie stream/download link is not available yet.'); };
+                downloadBtn.onclick = function(e) { e.preventDefault(); alert('මේ ෆිල්ම් එකේ Download ලින්ක් එක තවම ඇතුලත් කරලා නැහැ! (Not added yet)'); };
                 downloadBtn.removeAttribute('target');
-                videoContainer.innerHTML = '<i class="fas fa-play-circle"></i>';
+                videoContainer.innerHTML = '<i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>';
             } else {
                 downloadBtn.onclick = null; downloadBtn.target = '_blank'; 
                 
@@ -608,10 +609,14 @@
                 if(match && match[0]) {
                     const driveId = match[0];
                     videoContainer.innerHTML = `
-                        <iframe src="https://drive.google.com/file/d/${driveId}/preview" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; z-index: 5; background: #000;" allow="autoplay; fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                        <div id="videoLoader" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); display:flex; flex-direction:column; align-items:center; z-index:2;">
+                            <div style="width: 50px; height: 50px; border: 4px solid rgba(229, 9, 20, 0.2); border-top: 4px solid #e50914; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            <span style="margin-top:15px; color:#ccc; font-size:0.95rem; font-weight:600; letter-spacing:1px; text-shadow: 0 0 10px #000;">Loading Stream...</span>
+                        </div>
+                        <iframe src="https://drive.google.com/file/d/${driveId}/preview" onload="document.getElementById('videoLoader').style.display='none';" style="width: 100%; height: 100%; border: none; border-radius: 15px; position: absolute; top: 0; left: 0; z-index: 5; background: transparent; animation: videoFadeIn 1s ease-in-out;" allow="autoplay; fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                     `;
                 } else {
-                    videoContainer.innerHTML = '<i class="fas fa-play-circle"></i>';
+                    videoContainer.innerHTML = '<i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>';
                 }
             }
             modal.style.display = 'flex';
@@ -622,7 +627,7 @@
             modal.classList.remove('active');
             setTimeout(() => { 
                 modal.style.display = 'none'; 
-                document.getElementById('modalVideoContainer').innerHTML = '<i class="fas fa-play-circle"></i>';
+                document.getElementById('modalVideoContainer').innerHTML = '<i class="fas fa-play-circle" style="font-size: 6rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));"></i>';
             }, 400); 
         }
         window.onclick = function(event) { if (event.target === modal) closeModal(); }
